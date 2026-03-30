@@ -16,20 +16,22 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, login: () => {}, logout: () => {} });
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/auth/me', { credentials: 'include' })
+    fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setUser(data.user || null); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
-  const login = () => { window.location.href = '/api/auth/google'; };
+  const login = () => { window.location.href = `${API_BASE}/api/auth/google`; };
   const logout = () => {
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' })
       .then(() => setUser(null));
   };
 

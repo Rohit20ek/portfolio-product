@@ -1,50 +1,77 @@
-# React + TypeScript + Vite
+# Rohit Kumar's Portfolio - Professional Product & Data Strategy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance portfolio featuring dynamic animations, algorithmic art, and a custom admin management system.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
+- **Frontend**: [https://rohit20ek.github.io/portfolio-product/](https://rohit20ek.github.io/portfolio-product/)
+- **Backend**: Hosted on Render (Free Tier)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🛠 Deployment Guide (Free Tier)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This project is configured to run for $0/month using GitHub Pages, Render, and Supabase.
 
-- Configure the top-level `parserOptions` property like this:
+### 1. Database (Supabase)
+1. Create a free project at [Supabase](https://supabase.com/).
+2. Go to **Settings -> Database** and copy the **Connection String** (URI).
+3. Ensure it looks like `postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres`.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### 2. Backend (Render)
+1. Create a free account at [Render](https://render.com/).
+2. Create a new **Web Service**.
+3. Connect your GitHub repository `portfolio-product`.
+4. Set the following configurations:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+5. Add the following **Environment Variables**:
+   - `DATABASE_URL`: (Your Supabase connection string)
+   - `SESSION_SECRET`: (Any long random string)
+   - `NODE_ENV`: `production`
+   - `FRONTEND_URL`: `https://rohit20ek.github.io/portfolio-product`
+   - `GOOGLE_CLIENT_ID`: (From Google Cloud Console)
+   - `GOOGLE_CLIENT_SECRET`: (From Google Cloud Console)
+   - `GOOGLE_CALLBACK_URL`: `https://[YOUR-RENDER-URL].onrender.com/api/auth/google/callback`
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 3. Frontend (GitHub Pages)
+1. Go to your repository **Settings -> Pages**.
+2. Under **Build and deployment -> Source**, select **GitHub Actions**.
+3. Go to **Settings -> Secrets and variables -> Actions**.
+4. Add a **New repository secret**:
+   - `VITE_API_URL`: (Your Render Web Service URL, e.g., `https://portfolio-backend.onrender.com`)
+5. Push your code to the `main` branch. The GitHub Action will automatically build and deploy the site.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+---
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 💻 Local Development
+
+1. **Clone the repo**:
+   ```bash
+   git clone https://github.com/Rohit20ek/portfolio-product.git
+   ```
+
+2. **Setup Backend**:
+   ```bash
+   cd backend
+   npm install
+   cp .env.example .env
+   # Update .env with your local or Supabase DB URL
+   node server.js
+   ```
+
+3. **Setup Frontend**:
+   ```bash
+   # In a new terminal
+   cd portfolio
+   npm install
+   npm run dev -- --port 5173
+   ```
+
+---
+
+## ✨ Features
+- **Algo Art**: 3 canvas-based mathematical art variants (Flow, Web, Pulse).
+- **Admin Mode**: Shift + Ctrl + A to edit work experience, projects, and testimonials.
+- **Feedback System**: Real-time upvotes and comments powered by PostgreSQL.
+- **Dynamic Timeline**: Animated scroll-reveal journey.

@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAdmin, Experience, Recommendation, Certification } from '../context/AdminContext';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 function EditField({ value, onChange, multiline = false, className = '' }: {
   value: string; onChange: (v: string) => void; multiline?: boolean; className?: string;
 }) {
@@ -132,7 +134,7 @@ export default function AdminPanel() {
   const [notionUrl, setNotionUrl] = useState('');
 
   useEffect(() => {
-    fetch('/api/settings').then(r => r.json()).then(s => {
+    fetch(`${API_BASE}/api/settings`).then(r => r.json()).then(s => {
       setAuthRequired(s.auth_required === 'true');
       setNotionUrl(s.notion_url || '');
     }).catch(() => {
@@ -143,7 +145,7 @@ export default function AdminPanel() {
 
   const saveSetting = (key: string, value: string) => {
     localStorage.setItem(`port_${key}`, value);
-    fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, value }) }).catch(() => {});
+    fetch(`${API_BASE}/api/settings`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, value }) }).catch(() => {});
   };
 
   if (!isAdmin) return null;

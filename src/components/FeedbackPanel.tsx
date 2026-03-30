@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 interface Comment {
   id: number;
   product_id: string;
@@ -22,7 +24,7 @@ export default function FeedbackPanel({ productId }: { productId: string }) {
   const [submitting, setSubmitting] = useState(false);
 
   const fetchFeedback = () => {
-    fetch(`/api/feedback/${productId}`, { credentials: 'include' })
+    fetch(`${API_BASE}/api/feedback/${productId}`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => {
         setUpvotes(data.upvotes || 0);
@@ -34,14 +36,14 @@ export default function FeedbackPanel({ productId }: { productId: string }) {
 
   useEffect(() => {
     fetchFeedback();
-    fetch('/api/settings').then(r => r.json()).then(s => {
+    fetch(`${API_BASE}/api/settings`).then(r => r.json()).then(s => {
       setAuthRequired(s.auth_required === 'true');
     }).catch(() => {});
   }, [productId]);
 
   const handleUpvote = async () => {
     if (authRequired && !user) { login(); return; }
-    const res = await fetch(`/api/feedback/${productId}/upvote`, { method: 'POST', credentials: 'include' });
+    const res = await fetch(`${API_BASE}/api/feedback/${productId}/upvote`, { method: 'POST', credentials: 'include' });
     const data = await res.json();
     if (res.status === 401) { login(); return; }
     setUserUpvoted(data.upvoted);
@@ -52,7 +54,7 @@ export default function FeedbackPanel({ productId }: { productId: string }) {
     if (!commentText.trim()) return;
     if (authRequired && !user) { login(); return; }
     setSubmitting(true);
-    const res = await fetch(`/api/feedback/${productId}/comment`, {
+    const res = await fetch(`${API_BASE}/api/feedback/${productId}/comment`, {
       method: 'POST', credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ body: commentText })
@@ -65,7 +67,7 @@ export default function FeedbackPanel({ productId }: { productId: string }) {
   };
 
   const handleDelete = async (commentId: number) => {
-    await fetch(`/api/feedback/${productId}/comment/${commentId}`, { method: 'DELETE', credentials: 'include' });
+    await fetch(`${API_BASE}/api/feedback/${productId}/comment/${commentId}`, { method: 'DELETE', credentials: 'include' });
     setComments(prev => prev.filter(c => c.id !== commentId));
   };
 
